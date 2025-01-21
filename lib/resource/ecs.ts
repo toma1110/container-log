@@ -99,50 +99,50 @@ export class Ecs extends BaseResource {
 
         this.taskDefinitionBackend = new CfnTaskDefinition(scope, 'backend-def', {
             containerDefinitions: [
-                // // 【ログ収集運用】FireLens利用に変更
-                // {
-                //     essential: true,
-                //     image: accountId + '.dkr.ecr.ap-northeast-1.amazonaws.com/sbcntr-base:log-router',
-                //     name: 'log_router',
-                //     firelensConfiguration: {
-                //         type: 'fluentbit',
-                //         options: {
-                //             'config-file-type': 'file',
-                //             'config-file-value': '/fluent-bit/custom.conf'
-                //         }
-                //     },
-                //     environment: [
-                //         {
-                //             name: "APP_ID",
-                //             value: "backend-def"
-                //         },
-                //         {
-                //             name: "AWS_ACCOUNT_ID",
-                //             value: accountId
-                //         },
-                //         {
-                //             name: "AWS_REGION",
-                //             value: "ap-northeast-1"
-                //         },
-                //         {
-                //             name: "LOG_BUCKET_NAME",
-                //             value: "sbcntr-" + accountId
-                //         },
-                //         {
-                //             name: "LOG_GROUP_NAME",
-                //             value: "/ecs/sbcntr-stg-backend"
-                //         }
-                //     ],
-                //     logConfiguration: {
-                //     logDriver: 'awslogs',
-                //     options: {
-                //         'awslogs-group': sbcntrFirelensContainerLogGroup.logGroupName,
-                //         'awslogs-region': 'ap-northeast-1',
-                //         'awslogs-stream-prefix': 'firelens'
-                //         }
-                //     },
-                //     memoryReservation: 50
-                // },
+                // 【ログ収集運用】FireLens利用に変更
+                {
+                    essential: true,
+                    image: accountId + '.dkr.ecr.ap-northeast-1.amazonaws.com/sbcntr-base:log-router',
+                    name: 'log_router',
+                    firelensConfiguration: {
+                        type: 'fluentbit',
+                        options: {
+                            'config-file-type': 'file',
+                            'config-file-value': '/fluent-bit/custom.conf'
+                        }
+                    },
+                    environment: [
+                        {
+                            name: "APP_ID",
+                            value: "backend-def"
+                        },
+                        {
+                            name: "AWS_ACCOUNT_ID",
+                            value: accountId
+                        },
+                        {
+                            name: "AWS_REGION",
+                            value: "ap-northeast-1"
+                        },
+                        {
+                            name: "LOG_BUCKET_NAME",
+                            value: "sbcntr-" + accountId
+                        },
+                        {
+                            name: "LOG_GROUP_NAME",
+                            value: "/ecs/sbcntr-stg-backend"
+                        }
+                    ],
+                    logConfiguration: {
+                    logDriver: 'awslogs',
+                    options: {
+                        'awslogs-group': sbcntrFirelensContainerLogGroup.logGroupName,
+                        'awslogs-region': 'ap-northeast-1',
+                        'awslogs-stream-prefix': 'firelens'
+                        }
+                    },
+                    memoryReservation: 50
+                },
 
                 //  メインアプリケーションコンテナ
                 {
@@ -160,19 +160,21 @@ export class Ecs extends BaseResource {
                     name: 'app',
                     protocol: 'tcp',
                 }],
-                logConfiguration: {
-                    logDriver: 'awslogs',
-                    options: {
-                        'awslogs-group': logGroupBackend.logGroupName,
-                        'awslogs-region': 'ap-northeast-1',
-                        'awslogs-stream-prefix': 'ecs',
-                    },
-                },
 
-                // // 【ログ収集運用】FireLens利用に変更
+                
                 // logConfiguration: {
-                //     logDriver: 'awsfirelens',
+                //     logDriver: 'awslogs',
+                //     options: {
+                //         'awslogs-group': logGroupBackend.logGroupName,
+                //         'awslogs-region': 'ap-northeast-1',
+                //         'awslogs-stream-prefix': 'ecs',
+                //     },
                 // },
+
+                // 【ログ収集運用】FireLens利用に変更
+                logConfiguration: {
+                    logDriver: 'awsfirelens',
+                },
             }],
             cpu: '512',
             executionRoleArn: sbcntrStgRoleTaskDefinitionArn,
